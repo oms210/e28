@@ -15,8 +15,9 @@ const Game = {
             playerTurn: true,
             feedbackMessage: '',
             puzzleWordsArray: [],
-            puzzleLetters :[],
+            puzzleLetters: [],
             roundOver: false,
+            choice: [],
             rounds: [{
                     number: 1,
                     winner: 'Player',
@@ -86,19 +87,17 @@ const Game = {
         reset() {
             this.correct = false;
             this.guesses = [];
-            this.guess = null;
+            this.guess = '';
             this.feedbackMessage = '';
             this.correctGuesses = [];
             this.puzzleLetters = [];
-            this.playerTurn = false;
+            this.playerTurn = true;
             this.displayPuzzle = '';
-            this.lastPuzzle = null;
-            this.category = null;
-            this.puzzle = null;
+            this.category = '';
+           // this.puzzle = '';
             this.feedback = false;
             this.roundOver = false;
-            this.playerName = '';
-            this.gameStarted =false;
+            this.choice = [];
         },
         submitGuess() {
             this.guess = this.guess.toLowerCase();
@@ -114,30 +113,28 @@ const Game = {
                 } else {
                     this.playerTurn = !this.playerTurn;
                     this.feedbackMessage = this.guess + ' has already been guessed.';
-                    this.guess='';
+                    this.guess = '';
                     this.correct = false;
                 }
             } else {
                 this.playerTurn = !this.playerTurn;
                 this.feedbackMessage = this.guess.toUpperCase() + ' is incorrect.';
-                this.guess='';
+                this.guess = '';
                 this.correct = false;
             }
             setTimeout(() => this.feedback = false, 3000);
             if (!this.playerTurn)
                 this.executeComputerGuess();
-    
-          this.guess = '';
+
+            this.guess = '';
         },
         startGame() {
-          
-           if (this.roundOver)
-           this.reset();
             this.gameStarted = true;
             this.loadGame();
         },
         loadGame() {
-           
+            if (this.roundOver)
+                this.reset();
             this.feedback = false;
             this.guess = '';
             while (this.puzzle === this.lastPuzzle) {
@@ -146,11 +143,11 @@ const Game = {
                 this.puzzle = this.choice.options[Math.floor(Math.random() * this.choice.options.length)];
             }
             this.lastPuzzle = this.puzzle;
-             //all letters in lowercase stored invidually to compare for submitted guesses
+            //all letters in lowercase stored invidually to compare for submitted guesses
             let allLettersArray = this.puzzle.split('');
             allLettersArray.forEach(element => {
-                if (element !='-')
-                this.puzzleLetters.push(element.toLowerCase());
+                if (element != '-')
+                    this.puzzleLetters.push(element.toLowerCase());
             });
             this.generatePuzzle();
         },
@@ -171,7 +168,7 @@ const Game = {
                 }
                 blankPuzzle = blankPuzzle + ' ';
             });
-           
+
             if (blankPuzzle.indexOf('_') < 0) {
                 this.roundOver = true;
 
@@ -185,27 +182,27 @@ const Game = {
         executeComputerGuess() {
             var that = this;
             let randomCheckForExistingGuesses = Math.floor(Math.random() * 10) + 1;
-            
+
             setTimeout(() => that.guess = that.letters[Math.floor(Math.random() * that.letters.length)], 4000);
             setTimeout(function () {
-                
+
                 if (randomCheckForExistingGuesses % 2 == 0) {
                     if (that.guesses.includes(that.guess)) {
                         that.feedback = true;
-                        that.playerTurn = true;                      
+                        that.playerTurn = true;
                         that.correct = false;
                         that.feedbackMessage = 'Wrong move. ' + that.guess.toUpperCase() + ' is incorrect.';
-                        
-                        
+
+
                     } else
                         that.submitGuess();
                 } else {
                     that.submitGuess();
                 }
                 if (that.playerTurn)
-                setTimeout(() => this.feedback = false, 3000);
+                    setTimeout(() => this.feedback = false, 3000);
             }, 5000);
-           
+
         },
         deleteRound(number) {
             this.rounds = this.rounds.filter(round => round.number != number);

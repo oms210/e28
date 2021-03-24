@@ -20,7 +20,7 @@
     <script src="script.js" defer></script>
     <title>Guess the Puzzle!</title>
     <style>
-        [v-v-cloak] {
+        [v-cloak] {
             display: none;
         }
 
@@ -35,8 +35,6 @@
             font-family: consolas;
             font-size: 25px;
         }
-
-
 
         .feedback {
             display: inline-block;
@@ -111,7 +109,7 @@
         </div>
 
         <div v-else class="card rounded border">
-            <div v-if="feedback" class="feedback alert card-header"
+            <div v-if="feedback" class="feedback alert card-header text-uppercase"
                 v-bind:class="{ 'alert-success': correct, 'alert-danger': !correct }">{{feedbackMessage}}</div>
             <div class="card-body">
                 <div class="row">
@@ -125,19 +123,12 @@
                         Puzzle:
                     </div> -->
                         <div class="row">
-                            <div class="col-md-9 display-4 text-primary">
+                            <div class="col-md-12 display-4 text-primary">
                                 <span style="white-space: break-spaces;" class="displayPuzzle">{{ displayPuzzle
                                     }}</span>
                             </div>
                         </div>
                     </div>
-                    <!-- <div class="col-md-3 lead text-right">
-                        Category
-                    </div>
-
-                    <div class="col-md-9 lead text-info">
-                        <em>{{ category }}</em>
-                    </div> -->
                 </div>
                 <div class="row">
                     <div class="col-md-5  playersBox text-center card"
@@ -181,7 +172,7 @@
                 </div>
             </div>
         </div>
-
+<br/>
         <div v-if="roundOver">
 
             <button v-on:click="loadGame" class="btn btn-primary">Play again</button>
