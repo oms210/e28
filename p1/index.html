@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+        integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous" />
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns"
+        crossorigin="anonymous"></script>
+
+    <script src="https://unpkg.com/vue@next" defer></script>
+    <script src="script.js" defer></script>
+    <title>Guess the Puzzle!</title>
+    <style>
+        [v-v-cloak] {
+            display: none;
+        }
+
+        #history div {
+            background-color: #eee;
+            padding: 10px;
+            margin: 10px 0;
+            width: 300px;
+        }
+
+        .displayPuzzle {
+            font-family: consolas;
+            font-size: 25px;
+        }
+
+
+
+        .feedback {
+            display: inline-block;
+
+            color: white;
+            font-weight: bold;
+            font-size: 25px;
+        }
+
+        .playersBox {
+            margin: 30px;
+            padding-bottom: 25px;
+            padding-left: 25px;
+            padding-top: 25px;
+
+            vertical-align: middle;
+            border-width: 10px;
+            border-style: solid;
+            border-radius: 10px;
+        }
+
+        .puzzleBox {
+            margin: 10px !important;
+            border-color: cornflowerblue;
+            background-color: aliceblue;
+            width: 103% !important;
+            text-align: center !important;
+            vertical-align: middle !important;
+        }
+
+        .categoryHeader {
+            width: 103%;
+            background-color: cornflowerblue;
+            color: white;
+            font-size: 36px;
+            font-weight: bolder;
+            text-align: center;
+            margin: -25px 0px 0px -26px;
+        }
+
+        .activeTurn {
+            background-color: mintcream;
+        }
+
+        .inActiveTurn {
+            background-color: darksalmon;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app" v-cloak class="container jumbotron border border-primary">
+        <div>
+            <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button"
+                aria-expanded="false" aria-controls="collapseExample">
+                Instructions
+            </a>
+            <ol class="collapse" id="collapseExample">
+                <li>Enter your name</li>
+                <li>This game is biased in favor of the player. Player gets the first turn.</li>
+                <li>Guess the puzzle by guessing alphabet</li>
+                <li>Keep guessing until you get the letters right</li>
+                <li>Turn goes over to the bot if you guess a letter wrong</li>
+                <li>Whoever finishes first, wins the game!</li>
+            </ol>
+        </div>
+        <br />
+        <div v-if="!gameStarted">
+            <label for="playerName">Enter your name: </label>&nbsp;
+            <input type="text" id="playerName" v-model="playerName" v-on:keyup.enter="startGame" />&nbsp;
+            <button v-on:click="startGame" class="btn btn-primary">Let’s play!</button>
+        </div>
+
+        <div v-else class="card rounded border">
+            <div v-if="feedback" class="feedback alert card-header"
+                v-bind:class="{ 'alert-success': correct, 'alert-danger': !correct }">{{feedbackMessage}}</div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12 lead text-uppercase">Game on, <strong>{{ playerName }}</strong>!</div>
+                    <br />
+                    <div class="playersBox puzzleBox row card">
+                        <div class="card-header categoryHeader text-capitalize">
+                            {{ category }}
+                        </div>
+                        <!-- <div class="col-md-3  display-4 text-right">
+                        Puzzle:
+                    </div> -->
+                        <div class="row">
+                            <div class="col-md-9 display-4 text-primary">
+                                <span style="white-space: break-spaces;" class="displayPuzzle">{{ displayPuzzle
+                                    }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <div class="col-md-3 lead text-right">
+                        Category
+                    </div>
+
+                    <div class="col-md-9 lead text-info">
+                        <em>{{ category }}</em>
+                    </div> -->
+                </div>
+                <div class="row">
+                    <div class="col-md-5  playersBox text-center card"
+                        v-bind:class="{ 'border-success':playerTurn,'activeTurn': playerTurn, 'border-danger':!playerTurn,'inActiveTurn': !playerTurn }">
+
+
+                        <img class="card-img-top" src="images/player.png" />
+                        <div class="card-body">
+
+                            <div class="card-title  text-uppercase align-middle font-weight-bold">{{playerName}}</div>
+                            <div v-if="playerTurn">
+                                <div class="card-subtitle mb-2 text-muted">Your turn</div>
+                                <div class="row card-text text-uppercase font-weight-bold">
+
+                                    <input maxlength="1" type="text" id="guess" v-model.trim="guess"
+                                        v-on:keyup.enter="submitGuess" /> &nbsp;&nbsp;
+
+                                    <button v-on:click="submitGuess" class="btn btn-dark">Guess!</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-5  playersBox text-center card" style="margin-left: 80px;"
+                        v-bind:class="{ 'border-success': !playerTurn,'activeTurn': !playerTurn, 'border-danger':playerTurn,'inActiveTurn': playerTurn }">
+                        <img class="card-img-top" src="images/bot.png" />
+                        <div class="card-body">
+
+                            <div class="card-title  text-uppercase align-middle font-weight-bold">Mr. Bot</div>
+                            <div v-if="!playerTurn">
+                                <div class="card-subtitle mb-2 text-muted">Mr. Bot's turn</div>
+                                <div class=" text-uppercase font-weight-bold row" v-if="guess!=''">
+                                    <span style="font-size: 26px; text-align: center; width:100%"
+                                        class="p-3 mb-2 bg-success text-white"> {{guess}}</span>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div v-if="roundOver">
+
+            <button v-on:click="loadGame" class="btn btn-primary">Play again</button>
+        </div>
+    </div>
+
+
+
+
+    <div id="history">
+        <round-detail v-for="round in rounds" v-bind:key="round.number" v-bind:number="round.number"
+            v-bind:winner="round.winner" v-bind:choice="round.choice" v-on:delete-round="deleteRound($event)">
+            <template v-slot:coin>The coin landed on {{ round.coin }}</template>
+        </round-detail>
+    </div>
+    </div>
+    <script id="round-detail" type="text/x-template">
+      <div>
+          <ul>
+              <li>Round #: {{ number }}</li>
+              <li>Winner: {{ winner }}</li>
+              <li><slot name='coin'></slot></li>
+              <li>The player's choice was {{ choice }}</li>
+          </ul>
+          <button v-on:click='$emit("delete-round", number)'>Delete from history</button>
+      </div>
+    </script>
+</body>
+
+</html>
