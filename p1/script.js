@@ -130,12 +130,14 @@ const Game = {
           this.guess = '';
         },
         startGame() {
+          
+           if (this.roundOver)
+           this.reset();
             this.gameStarted = true;
             this.loadGame();
         },
         loadGame() {
-            if (this.gameStarted)
-            this.reset();
+           
             this.feedback = false;
             this.guess = '';
             while (this.puzzle === this.lastPuzzle) {
@@ -172,6 +174,7 @@ const Game = {
            
             if (blankPuzzle.indexOf('_') < 0) {
                 this.roundOver = true;
+
                 if (this.playerTurn)
                     this.feedbackMessage = this.playerName + ', Great work!';
                 else
