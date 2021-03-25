@@ -24,13 +24,33 @@
             display: none;
         }
 
-        #history div {
-            background-color: #eee;
+        .history {
             padding: 10px;
             margin: 10px 0;
-            width: 300px;
+           
+            width: 101% !important;
+            text-align: center !important;
+            vertical-align: middle !important;
         }
-
+       
+        .historyHeader {
+            
+            width: 101%;
+            background-color: cornflowerblue;
+            color: white;
+            font-size: 15px;
+            font-weight: bolder;
+            text-align: center;
+            margin: -12px 0px 0px -1px;
+        }
+        .historyContent
+        {
+            color: black;
+            font-size: 13px;
+            font-weight: bolder;
+            text-align: center!important;
+            margin-left: 15px !important;
+        }
         .displayPuzzle {
             font-family: consolas;
             font-size: 25px;
@@ -82,6 +102,13 @@
         .inActiveTurn {
             background-color: darksalmon;
         }
+        .evenRowHistory
+        {
+            background-color: aliceblue;
+        }
+        .oddRowHistory{
+            background-color: burlywood;
+        }
     </style>
 </head>
 
@@ -119,9 +146,6 @@
                         <div class="card-header categoryHeader text-capitalize">
                             {{ category }}
                         </div>
-                        <!-- <div class="col-md-3  display-4 text-right">
-                        Puzzle:
-                    </div> -->
                         <div class="row">
                             <div class="col-md-12 display-4 text-primary">
                                 <span style="white-space: break-spaces;" class="displayPuzzle">{{ displayPuzzle
@@ -172,34 +196,66 @@
                 </div>
             </div>
         </div>
-<br/>
-        <div v-if="roundOver">
+        <br />
+        <div class="row">
+            <div class="col-md-5 ">
+                <div class="text-left" v-if="roundOver">
+                    <button v-on:click="loadGame" class="btn btn-primary">Play again</button>
+                </div>
+            </div>
+            <div class="col-md-5">
+                &nbsp;
+            </div>
+            <div class="col-md-2 text-right"> 
+              
+                <div v-if="showHistory">
+                   
+                    <a class="btn btn-primary" data-toggle="collapse" href="#history" role="button"
+                        aria-expanded="false" aria-controls="history">
+                        History
+                    </a>
+                    <div class="collapse history" id="history" >
 
-            <button v-on:click="loadGame" class="btn btn-primary">Play again</button>
+                         <round-detail v-for="round in rounds" v-bind:key="round.number" v-bind:number="round.number"
+                            v-bind:winner="round.winner" v-on:delete-round="deleteRound($event)">
+
+                        </round-detail> 
+
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
+    
+  
 
-
-
-    <div id="history">
-        <round-detail v-for="round in rounds" v-bind:key="round.number" v-bind:number="round.number"
-            v-bind:winner="round.winner" v-bind:choice="round.choice" v-on:delete-round="deleteRound($event)">
-            <template v-slot:coin>The coin landed on {{ round.coin }}</template>
-        </round-detail>
-    </div>
-    </div>
     <script id="round-detail" type="text/x-template">
-      <div>
-          <ul>
-              <li>Round #: {{ number }}</li>
-              <li>Winner: {{ winner }}</li>
-              <li><slot name='coin'></slot></li>
-              <li>The player's choice was {{ choice }}</li>
-          </ul>
-          <button v-on:click='$emit("delete-round", number)'>Delete from history</button>
+        <div class="row">
+
+            <div class="col-md-12" v-if="number>0">
+              <div class="col-md-8">
+              </div>
+              <div class="row card">
+                  <div class="historyHeader text-capitalize">
+
+                    &nbsp; &nbsp; Round #  {{ number }}  &nbsp;
+                   <img style="cursor:grab ;" v-on:click='$emit("delete-round", number)' src="images/delete.png" />
+                  
+                  </div>
+                  <div class="row historyContent">
+                     <div class="col-md-1"> </div>
+                         <div class="col-md-9 ">
+                           Winner: {{ winner }} </div>
+                           <div class="col-md-2"> </div>
+                     
+                  </div>
+                 
+              </div>
+          </div>
       </div>
     </script>
+
 </body>
 
 </html>

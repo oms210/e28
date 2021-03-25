@@ -10,3 +10,4 @@ https://icons8.com/icons/
 ## Notes for instructor
 I am late. Still finalizing the running history code
 And FYI, my assignment submission was very simple that's why I changed the game for this project. This game is about guessing a puzzle (loosely based on "Wheel of Fortune" game show. Player play against the computer and all computer guesses are dynamically populated
+**[3/25/2021 - 11:31 CT]** - Fixed history and some other CSS changes

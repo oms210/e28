@@ -17,32 +17,14 @@ const Game = {
             puzzleWordsArray: [],
             puzzleLetters: [],
             roundOver: false,
+            roundsCounter: 0,
             choice: [],
-            rounds: [{
-                    number: 1,
-                    winner: 'Player',
-                    coin: 'heads',
-                    choice: 'heads'
-                },
-                {
-                    number: 2,
-                    winner: 'Computer',
-                    coin: 'tails',
-                    choice: 'heads'
-                },
-                {
-                    number: 3,
-                    winner: 'Computer',
-                    coin: 'heads',
-                    choice: 'tails'
-                },
-                {
-                    number: 4,
-                    winner: 'Player',
-                    coin: 'tails',
-                    choice: 'tails'
-                },
-            ],
+            rounds: [],
+            // rounds: [{
+            //         number :0,
+            //         winner   :''                 
+            //     }
+            // ],
             puzzles: [{
                     category: 'On the map',
                     options: [
@@ -94,9 +76,10 @@ const Game = {
             this.playerTurn = true;
             this.displayPuzzle = '';
             this.category = '';
-           // this.puzzle = '';
+            // this.puzzle = '';
             this.feedback = false;
             this.roundOver = false;
+            this.showHistory = false;
             this.choice = [];
         },
         submitGuess() {
@@ -123,14 +106,16 @@ const Game = {
                 this.correct = false;
             }
             setTimeout(() => this.feedback = false, 3000);
-            if (!this.playerTurn)
+            if (!this.playerTurn && !this.roundOver)
                 this.executeComputerGuess();
 
             this.guess = '';
         },
         startGame() {
-            this.gameStarted = true;
-            this.loadGame();
+            if (this.playerName != '') {
+                this.gameStarted = true;
+                this.loadGame();
+            }
         },
         loadGame() {
             if (this.roundOver)
@@ -171,11 +156,21 @@ const Game = {
 
             if (blankPuzzle.indexOf('_') < 0) {
                 this.roundOver = true;
-
-                if (this.playerTurn)
+                this.showHistory = true;
+                this.roundsCounter++;
+                if (this.playerTurn) {
                     this.feedbackMessage = this.playerName + ', Great work!';
-                else
+                    this.rounds.push({
+                        number: this.roundsCounter,
+                        winner: this.playerName.toUpperCase()
+                    });
+                } else {
+                    this.rounds.push({
+                        number: this.roundsCounter,
+                        winner: 'Mr. Bot'
+                    });
                     this.feedbackMessage = 'Sorry, ' + this.playerName + ', you lost. Better luck next time!';
+                }
             }
             this.displayPuzzle = blankPuzzle;
         },
@@ -217,9 +212,6 @@ const RoundDetail = {
             default: 0
         },
         winner: {
-            type: String
-        },
-        choice: {
             type: String
         }
     },
