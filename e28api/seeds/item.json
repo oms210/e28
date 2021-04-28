@@ -1,0 +1,56 @@
+{
+    "seeds": [
+        {
+            "name": "Sour Cream",        
+            "unit": "cup(s)"
+        },
+        {
+            "name": "Garlic",        
+            "unit": "clove(s)"
+        },
+        {
+            "name": "Dried Rosemary",        
+            "unit": "tablespoon(s)"
+        },
+        {
+            "name": "Garlic Powder",        
+            "unit": "tablespoon(s)"
+        },
+        {
+            "name": "Dried Sage",        
+            "unit": "teaspoon(s)"
+        },
+        {
+            "name": "Chicken Breast",        
+            "unit": "halves"
+        },
+        {
+            "name": "Honey",        
+            "unit": "cup(s)"
+        },
+        {
+            "name": "Mustard",        
+            "unit": "cup(s)"
+        },
+        {
+            "name": "Paprika",        
+            "unit": "teaspoon(s)"
+        },
+        {
+            "name": "Dried Basil",        
+            "unit": "teaspoon(s)"
+        },
+        {
+            "name": "Dried Parsley",        
+            "unit": "teaspoon(s)"
+        },
+        {
+            "name": "Egg",        
+            "unit": "unit(s)"
+        },
+        {
+            "name": "Mayo",        
+            "unit": "cup(s)"
+        }
+    ]
+}

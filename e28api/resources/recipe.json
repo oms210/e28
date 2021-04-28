@@ -1,0 +1,28 @@
+{
+    "permission_level": 0,
+    "fields": {
+        "name": {
+            "type": "string",
+            "validators": [
+                "required",
+                "min:3",
+                "max:100"
+            ]
+        },
+        "directions": {
+            "type": "text",
+            "validators": []
+        },        
+        "serves": {
+            "type": "integer",
+            "validators": [
+                "required",
+                "numeric"
+            ]
+        },
+        "categories": {
+            "type": "string",
+            "validators": []
+        }
+    }
+}

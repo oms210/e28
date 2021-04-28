@@ -1,0 +1,26 @@
+{
+    "permission_level": 0,
+    "fields": {
+        "recipe_id": {
+            "type": "integer",
+            "validators": [
+                "required",
+                "numeric"
+            ]
+        },
+        "item_id": {
+            "type": "integer",
+            "validators": [
+                "required",
+                "numeric"
+            ]
+        },       
+        "quantity": {
+            "type": "integer",
+            "validators": [
+                "required",
+                "numeric"
+            ]
+        }
+    }
+}

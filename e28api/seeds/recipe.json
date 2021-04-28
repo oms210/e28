@@ -1,0 +1,23 @@
+{
+    "seeds": [
+        {
+            "name": "Baked Honey Mustard Chicken",        
+            "directions": "Preheat oven to 350 degrees F (175 degrees C).|Sprinkle chicken breasts with salt and pepper to taste, and place in a lightly greased 9x13 inch baking dish. In a small bowl, combine the honey, mustard, basil, paprika, and parsley. Mix well. Pour 1/2 of this mixture over the chicken, and brush to cover.|Bake in the preheated oven for 30 minutes. Turn chicken pieces over and brush with the remaining 1/2 of the honey mustard mixture. Bake for an additional 10 to 15 minutes, or until chicken is no longer pink and juices run clear. Let cool 10 minutes before serving.",
+            "serves": 6,           
+            "categories": "chicken,dinner,baked"
+        },
+        {
+            "name": "Oven Fried Chicken",        
+            "directions": "Preheat the oven to 350 degrees F (175 degrees C). Place a cooling rack on top of a large cookie sheet. Spray the rack with vegetable cooking spray.|In a medium bowl, mix together sour cream and minced garlic. In another bowl, stir together the cornflake crumbs, rosemary, sage, garlic powder, salt and pepper. Coat the chicken with the sour cream mixture, then roll in the cornflake mixture. Arrange chicken pieces on top of the cooling rack.|Bake for 1 hour in the preheated oven, until meat is no longer pink, and juices run clear.",
+            "serves": 3,           
+            "categories": "chicken,dinner,fried"
+        },
+        {
+            "name": "Chicken Salad for One",        
+            "directions": "Combine chicken, egg, ranch dressing, mayonnaise, paprika, salt, and pepper in a small bowl.|Serve",
+            "serves": 1,           
+            "categories": "chicken,lunch,salad"
+        }
+        
+    ]
+}
