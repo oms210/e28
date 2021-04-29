@@ -12,6 +12,7 @@
           v-bind:recipe="recipe"
           v-bind:detailed="false"
           v-bind:ingredients="recipeIngredients"
+          
         ></show-recipe>
       </router-link>
     </div>

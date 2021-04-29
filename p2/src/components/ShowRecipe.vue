@@ -12,8 +12,8 @@
     <div v-if="detailed">
       <div class="row">
         <div class="col-md-12">
-          <h3><strong>Serves</strong></h3>
-          {{ recipe.serves }}
+          <h3><strong>Serves: </strong>
+          {{ recipe.serves }}</h3>
         </div>
       </div>
       <div class="row">
@@ -22,9 +22,7 @@
 
           <ul>
             <li v-for="(ingredient, index) in ingredients" v-bind:key="index">
-              {{ ingredient.quantity }}&nbsp;{{ ingredient.unit }}&nbsp;of&nbsp;{{
-                ingredient.name
-              }}
+              {{ ingredient.quantity }}&nbsp;{{ ingredient.unit }}&nbsp;of&nbsp;{{ingredient.name}}
               <img
                 style="cursor:grab ;"
                 v-on:click="addToShoppingList( ingredient.id)"
@@ -63,11 +61,11 @@ export default {
     ingredients: {
       type: Array,
     },
+   
+
   },
   data() {
-    return {
-      list: [],
-    };
+    return {};
   },
   computed: {
     imgSrc() {
@@ -89,13 +87,13 @@ export default {
       let ingredientListItem = { item_id: "", quantity: "" };
       ingredientListItem.item_id = ingredient.id;
       ingredientListItem.quantity = ingredient.quantity;
-      this.list.push(ingredientListItem);
-      axios.post("/list", this.list).then((response) => {
+      this.ingredientslist.push(ingredientListItem);
+      axios.post("/list", this.ingredientslist).then((response) => {
         if (response.data.errors) {
           this.errors = response.data.errors;
           this.showConfirmation = false;
         } else {
-          this.$emit("update-list");
+          this.$emit("update-ingredientslist");
           this.showConfirmation = true;
         }
       });

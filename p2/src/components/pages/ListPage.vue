@@ -1,16 +1,16 @@
 <template>
   <div id="list-page">
-    <h2>Recipes</h2>
+  
     <div id="list">
       <router-link
         class="list-link"
-        v-for="listItem in list"
-        v-bind:to="'/delete/' + listItem.id"
-        v-bind:key="listItem.id"
+        v-for="ingredient in ingredientslist"
+        v-bind:to="'/shoppinglist/' + ingredient.id"
+        v-bind:key="ingredient.id"
       >
         <show-list
-          v-bind:ingredient="listItem"
-         
+          v-bind:ingredient="ingredient"
+         v-bind:items="items"
         ></show-list>
       </router-link>
     </div>
@@ -18,20 +18,36 @@
 </template>
 
 <script>
+import { axios } from "@/common/app.js";
 import ShowList from "@/components/ShowList.vue";
 export default {
      components: {
     "show-list": ShowList,
   },
   props: {
-    list: {
+    ingredientslist: {
       type: Array,
       default: null,
-    }
+    },
+    items: {
+      type: Array,
+      default: null,
+    },
   },
   data() {
     return {};
-  },  
+  },
+  methods : {
+      deleteIngredient(ingredient){
+          axios.delete('/shoppinglist/' + ingredient.id).then(response=> {
+             if (!response.data.errors) {alert(this.id);}
+             else alert(response.data.errors);
+
+           
+      });
+      }
+
+  }
 };
 </script>
 <style scoped>

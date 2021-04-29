@@ -5,19 +5,23 @@
       v-bind:recipes="recipes"
       v-bind:ingredients="ingredients"
       v-bind:items="items"
-      v-bind:list="list"
+      v-bind:ingredientslist="ingredientslist"
       v-on:update-recipes="loadRecipes"
-      v-on:update-list="loadShoppingList"
+      v-on:update-ingredientslist="loadShoppingList"
     ></router-view>
 
-    <nav class="nav flex-column">
-      <router-link
+    <nav >
+      <ul class="nav justify-content-center">
+        <li  class="nav-item">
+          <router-link
         v-for="link in links"
         v-bind:key="link"
         v-bind:to="paths[link]"
-      >
-        {{ link }}</router-link
-      >
+        :class="nav-link"> {{ link }}</router-link>
+        </li>
+      </ul>
+      
+       
     </nav>
   </div>
 </template>
@@ -32,7 +36,7 @@ export default {
       recipes: [],
       ingredients: [],
       items: [],
-      list:[],
+      ingredientslist: [],
       links: ["home", "recipes","list"],
       paths: {
         home: "/",
@@ -67,10 +71,10 @@ export default {
     },
     loadShoppingList()
     {
-      axios.get("shoppingList").then((response) => {
-        this.list = response.data.item;
+      axios.get("ingredientslist").then((response) => {
+        this.ingredientslist = response.data.ingredientslist;
       });
-    }
+    },
 
   },
 };

@@ -1,25 +1,33 @@
 <template>
   <div class="show-list">
     <div class="name">
-   {{ ingredient.quantity }}&nbsp;{{ ingredient.unit }}&nbsp;of&nbsp;{{ingredient.name}}</div>
-   
-   
+      {{ ingredient.quantity }}&nbsp;{{ currentIngredient.unit }}&nbsp;of&nbsp;{{currentIngredient.name }}
+    </div>
   </div>
 </template>
 
 <script>
-
 export default {
   props: {
     ingredient: {
       type: Object,
     },
+    items: {
+      type: Array,
+      default: null,
+    },
   },
-   data() {
+  data() {
     return {};
   },
-  
-  
+  computed:{
+       currentIngredient() {
+      return this.items.filter((item) => {
+        return item.id == this.ingredient.item_id;
+      }, this.ingredient.item_id)[0];
+    },
+  },
+
 };
 </script>
 <style scoped>
@@ -28,17 +36,5 @@ export default {
   font-size: 2rem;
   margin: 5px 0 10px 0;
   vertical-align: baseline;
-}
-.description {
-  margin: auto;
-  text-align: left;
-  font-style: italic;
-  line-height: 1.5;
-}
-.price {
-  font-family: var(--serif-font);
-  font-weight: bold;
-  font-size: 2rem;
-  padding: 10px;
 }
 </style>

@@ -10,6 +10,7 @@
         v-bind:recipe="recipe"
         v-bind:detailed="true"
         v-bind:ingredients="recipeIngredients"
+        v-bind:ingredientslist="ingredientslist"
       ></show-recipe>
     </div>
   </div>
@@ -35,6 +36,10 @@ export default {
     items: {
       type: Array,
       default: null,
+    },
+     ingredientslist: {
+        type: Array,
+         default: null,
     },
   },
   data() {
