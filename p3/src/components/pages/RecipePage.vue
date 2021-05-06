@@ -10,7 +10,7 @@
         v-bind:recipe="recipe"
         v-bind:detailed="true"
         v-bind:ingredients="recipeIngredients"
-        v-bind:ingredientslist="ingredientsList"
+        v-bind:ingredientslist="ingredientslist"
       ></show-recipe>
     </div>
   </div>
@@ -36,7 +36,11 @@ export default {
     items: {
       type: Array,
       default: null,
-    }
+    },
+     ingredientslist: {
+        type: Array,
+         default: null,
+    },
   },
   data() {
     return {};
@@ -67,10 +71,6 @@ export default {
         });
       }
       return recIngredients;
-    },
-    ingredientsList ()
-    {
-      return this.ingredientslist;
     },
     recipeNotFound() {
       return this.recipe == null;

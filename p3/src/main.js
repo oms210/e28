@@ -12,7 +12,7 @@ const router = createRouter({
         { path: '/', component: HomePage },
         { path: '/recipe/:id', component: RecipePage, props: true },
         { path: '/recipes', component: RecipesPage },
-        { path: '/ingredientslist', component: ListPage,props: true },
+        { path: '/list', component: ListPage,props: true },
     ]
 });
 createApp(App).use(router).mount('#app')

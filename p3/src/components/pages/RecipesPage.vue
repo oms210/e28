@@ -12,7 +12,6 @@
           v-bind:recipe="recipe"
           v-bind:detailed="false"
           v-bind:ingredients="recipeIngredients"
-          v-bind:ingredientsList="ingredientsList"
           
         ></show-recipe>
       </router-link>
@@ -36,10 +35,6 @@ export default {
       default: null,
     },
     item: {
-      type: Array,
-      default: null,
-    },
-    ingredientslist: {
       type: Array,
       default: null,
     },
