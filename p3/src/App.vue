@@ -38,11 +38,13 @@ export default {
       ingredients: [],
       items: [],
       ingredientslist: [],
-      links: ["home", "recipes", "list"],
+      links: ["home", "recipes", "ingredientslist", "account"],
       paths: {
         home: "/",
         recipes: "/recipes",
-        list: "/list",
+        ingredientslist: "/ingredientslist",
+        account: "/account",
+
       },
     };
   },
