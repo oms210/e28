@@ -1,14 +1,7 @@
 <template>
   <div>
     <img alt="Vue logo" src="./assets/logo.png" />
-    <router-view
-      v-bind:recipes="recipes"
-      v-bind:ingredients="ingredients"
-      v-bind:items="items"
-      v-bind:ingredientslist="ingredientslist"
-      v-on:update-recipes="loadRecipes"
-      v-on:update-ingredientslist="loadShoppingList"
-    ></router-view>
+  
 
     <nav>
       <ul class="nav justify-content-center">
@@ -19,62 +12,87 @@
             v-bind:to="paths[link]"
             :class="nav-link"
           >
+          <span v-if="link == 'cart'" data-test="cart-count"
+                            >({{ cartCount }})</span
+                        >
             {{ link }}</router-link
           >
         </li>
       </ul>
     </nav>
+      <router-view
+      v-on:update-recipes="loadRecipes"
+      v-on:update-ingredients="loadIngredients"
+      v-on:update-groceryItems="loadGroceryItems"
+    ></router-view>
   </div>
 </template>
 
 <script>
-import { axios } from "@/common/app.js";
-
+import { cart } from "@/common/app.js";
 export default {
   name: "App",
   data() {
     return {
-      recipes: [],
-      ingredients: [],
-      items: [],
-      ingredientslist: [],
-      links: ["home", "recipes", "ingredientslist", "account"],
+     
+      links: ["home", "recipes","add a recipe", "cart", "account"],
       paths: {
         home: "/",
         recipes: "/recipes",
-        ingredientslist: "/ingredientslist",
+        "add a recipe": "/recipe/new",
+        cart: "/cart",
         account: "/account",
 
       },
     };
   },
+  computed :{
+     cartCount() {
+            return this.$store.state.cartCount;
+        },
+        recipes(){
+           return this.$store.state.recipes;
+        },
+        ingredients() {
+          return this.$store.state.ingredients;
+        },
+        groceryItems() {
+           return this.$store.state.groceryItems;
+        },
+
+  },
   mounted() {
     this.loadRecipes();
     this.loadIngredients();
-    this.loadItems();
-    this.loadShoppingList();
+    this.loadGroceryItems();
+    //this.loadCart();
+    this.$store.commit("setCartCount", cart.count());
   },
   methods: {
     loadRecipes() {
-      axios.get("recipe").then((response) => {
-        this.recipes = response.data.recipe;
-      });
+       this.$store.dispatch("getRecipes");
+      // axios.get("recipe").then((response) => {
+      //   this.recipes = response.data.recipe;
+      // });
     },
     loadIngredients() {
-      axios.get("ingredient").then((response) => {
-        this.ingredients = response.data.ingredient;
-      });
+       this.$store.dispatch("getIngredients");
+      // axios.get("ingredient").then((response) => {
+      //   this.ingredients = response.data.ingredient;
+      // });
     },
-    loadItems() {
-      axios.get("item").then((response) => {
-        this.items = response.data.item;
-      });
+    loadGroceryItems() {
+       this.$store.dispatch("getGroceryItems");
+      // axios.get("item").then((response) => {
+      //   this.items = response.data.item;
+      // });
     },
-    loadShoppingList() {
-      axios.get("ingredientslist").then((response) => {
-        this.ingredientslist = response.data.ingredientslist;
-      });
-    },
+    // loadCart() {
+    //    this.$store.dispatch("getCartItems");
+    //   // axios.get("ingredientslist").then((response) => {
+    //   //   this.ingredientslist = response.data.ingredientslist;
+    //   // });
+    // },
   },
 };
 </script>

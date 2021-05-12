@@ -25,7 +25,7 @@
                 ingredient.unit
               }}&nbsp;of&nbsp;{{ ingredient.name }}
               <img
-                style="cursor:grab ;"
+                style="cursor:grab ;" data-test="add-to-cart-button"
                 v-on:click="addToShoppingList(ingredient.id)"
                 src="@/assets/images/add.png"
               />
@@ -45,11 +45,21 @@
         </div>
       </div>
     </div>
+
+    <transition name="fade">
+      <div
+        class="alert"
+        v-if="addConfirmation"
+        data-test="add-to-cart-confirmation"
+      >
+        {{ this.groceryItemName }} was added to your cart!
+      </div>
+    </transition>
   </div>
 </template>
 
 <script>
-import { axios } from "@/common/app.js";
+import { cart } from "@/common/app.js";
 export default {
   props: {
     recipe: {
@@ -62,16 +72,11 @@ export default {
     ingredients: {
       type: Array,
     },
-    ingredientsList: {
-      type: Array,
-    },
   },
   data() {
     return {
-      ingredientListItem: {
-        item_id: "",
-        quantity: "",
-      },
+      addConfirmation: false,
+      groceryItemName: "",
     };
   },
   computed: {
@@ -88,24 +93,14 @@ export default {
   },
   methods: {
     addToShoppingList(id) {
-      let ingredient = this.ingredients.filter((item) => {
-        return id == item.id;
-      })[0];
-
-      this.ingredientListItem.item_id = ingredient.id;
-      this.ingredientListItem.quantity = ingredient.quantity;
-
-      axios
-        .post("/ingredientslist", this.ingredientListItem)
-        .then((response) => {
-          if (response.data.errors) {
-            this.errors = response.data.errors;
-            this.showConfirmation = false;
-          } else {
-            this.$emit("update-ingredientslist");
-            this.showConfirmation = true;
-          }
-        });
+      let groceryItem = this.$store.getters.getGroceryItemById(id);
+      cart.add(groceryItem.id);
+      this.$store.commit("setCartCount", cart.count());
+       this.groceryItemName = groceryItem.name;
+      this.addConfirmation = true;     
+      setTimeout(() => {
+        this.addConfirmation = false;
+      }, 3000);
     },
   },
 };
@@ -128,10 +123,5 @@ export default {
   font-style: italic;
   line-height: 1.5;
 }
-.price {
-  font-family: var(--serif-font);
-  font-weight: bold;
-  font-size: 2rem;
-  padding: 10px;
-}
+
 </style>

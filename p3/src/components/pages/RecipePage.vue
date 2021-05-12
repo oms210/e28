@@ -10,7 +10,6 @@
         v-bind:recipe="recipe"
         v-bind:detailed="true"
         v-bind:ingredients="recipeIngredients"
-        v-bind:ingredientslist="ingredientsList"
       ></show-recipe>
     </div>
   </div>
@@ -25,52 +24,35 @@ export default {
     id: {
       type: String,
     },
-    recipes: {
-      type: Array,
-      default: null,
-    },
-    ingredients: {
-      type: Array,
-      default: null,
-    },
-    items: {
-      type: Array,
-      default: null,
-    }
   },
   data() {
-    return {};
+    return { };
   },
   computed: {
     recipe() {
-      return this.recipes.filter((recipe) => {
-        return recipe.id == this.id;
-      }, this.id)[0];
+      return this.$store.getters.getRecipeById(this.id);
+    },
+    recipes() {
+      return this.$store.state.recipes;
     },
     recipeIngredients() {
       let recIngredients = [];
       if (!this.recipeNotFound) {
-        let recipeItemList = this.ingredients.filter((recipe) => {
+        let recipeItemList = this.$store.state.ingredients.filter((recipe) => {
           return recipe.recipe_id == this.id;
         });
         recipeItemList.forEach((recipeItem) => {
-          let matchingItem = this.items.filter((item) => {
-            return recipeItem.item_id == item.id;
-          })[0];
-          let ingredient = { name: "", quantity: "", unit: "", id:"" };
-          ingredient.name = matchingItem.name;
-          ingredient.unit = matchingItem.unit;
-          ingredient.id = matchingItem.id;
+          let matchingGroceryItem = this.$store.getters.getGroceryItemById(recipeItem.item_id);
+          let ingredient = { name: "", quantity: "", unit: "", id: "" };
+          ingredient.name = matchingGroceryItem.name;
+          ingredient.unit = matchingGroceryItem.unit;
+          ingredient.id = matchingGroceryItem.id;
           ingredient.quantity = recipeItem.quantity;
 
           recIngredients.push(ingredient);
         });
       }
       return recIngredients;
-    },
-    ingredientsList ()
-    {
-      return this.ingredientslist;
     },
     recipeNotFound() {
       return this.recipe == null;
