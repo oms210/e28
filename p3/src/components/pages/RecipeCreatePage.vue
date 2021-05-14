@@ -19,7 +19,12 @@
         v-bind:errors="errors.name"
       ></error-field>
       <label for="categories">Categories</label>
-      <input type="text" v-model="recipe.categories" id="categories" data-test="recipe-categories-input" />
+      <input
+        type="text"
+        v-model="recipe.categories"
+        id="categories"
+        data-test="recipe-categories-input"
+      />
 
       <label for="serves">Serving Size:</label>
       <input
@@ -125,7 +130,7 @@
     </div>
 
     <button
-      v-if="recipeIngredients.length > 1"
+      v-if="recipeIngredients.length > 0"
       v-on:click="addRecipe"
       data-test="add-recipe-button"
     >
@@ -188,13 +193,7 @@ export default {
         step2: "Step 2",
         step3: "Step 3",
       },
-      recipeIngredients: [
-        {
-          recipe_id: 1,
-          item_id: 1,
-          quantity: 1,
-        },
-      ],
+      recipeIngredients: [],
       recipeDirections: "",
     };
   },
@@ -255,53 +254,52 @@ export default {
     },
     addIngredient() {
       if (this.validateIngredient()) {
-        let ingredientGroceryItem = [];
-        let recipeIngredient = { recipe_id: 0, item_id: 0, quantity: 0 };
+        // Determine if this ingredient already exists
         axios
-          .get("/groceryitem/query?name='" + this.ingredient.name + "'")
+          .get("/groceryitem/query?name=" + this.ingredient.name)
           .then((response) => {
-            ingredientGroceryItem = response.data.groceryitem.map(
-              (groceryItem) => {
-                return this.$store.getters.getGroceryItemById(groceryItem.id);
-              }
-            );
-          });
-        //if already exists then no need to insert a duplicate item
-        if (!ingredientGroceryItem.length > 0) {          
-          let groceryItem = { name: "", unit: "" };
-          groceryItem.name = this.ingredient.name;
-          groceryItem.unit = this.ingredient.unit;
-          axios.post("/groceryitem", groceryItem).then((response) => {
-            if (response.data.errors) {
-              this.errors = response.data.errors;
-              this.showIngredientConfirmation = false;
+            if (response.data.groceryitem.length == 1) {
+              console.log("Ingredient already exists");
+              this.processIngredient(response.data.groceryitem[0]);
+              // Fade out confirmation after 3 seconds
+     
             } else {
+              console.log("Ingredient did not exist, adding");
               axios
-                .get("/groceryitem/query?name='" + groceryItem.name + "'")
+                .post("/groceryitem", {
+                  name: this.ingredient.name,
+                  unit: this.ingredient.unit,
+                })
                 .then((response) => {
-                  ingredientGroceryItem = response.data.groceryitem.map(
-                    (item) => {
-                      return this.$store.getters.getGroceryItemById(item.id);
-                    }
-                  );
+                  if (response.data.errors) {
+                    this.errors = response.data.errors;
+                    this.showIngredientConfirmation = false;
+                  } else {
+                    this.processIngredient(response.data.groceryitem);
+                  }
                 });
             }
           });
-        }
-        recipeIngredient.item_id = ingredientGroceryItem.id;
-        recipeIngredient.quantity = this.ingredient.quantity;
-        this.recipeIngredients.push(recipeIngredient);
-        this.showIngredientConfirmation = true;
-        // Fade out confirmation after 3 seconds
-        setTimeout(function() {
-          this.showIngredientConfirmation = false;
-          this.ingredient = {
-            name: "",
-            quantity: 0,
-            unit: "",
-          };
-        }, 3000);
+           setTimeout(function() {
+        this.showIngredientConfirmation = false;
+      }, 3000);
       }
+    },
+    processIngredient(ingredientGroceryItem) {
+      console.log("Processing ingredient:", ingredientGroceryItem);
+      let recipeIngredient = {
+        recipe_id: 0,
+        item_id: 0,
+        quantity: 0,
+      };
+
+      recipeIngredient.item_id = ingredientGroceryItem.id;
+      recipeIngredient.quantity = this.ingredient.quantity;
+
+      this.recipeIngredients.push(recipeIngredient);
+      this.showIngredientConfirmation = true;
+
+      
     },
     addRecipe() {
       if (this.validate()) {
